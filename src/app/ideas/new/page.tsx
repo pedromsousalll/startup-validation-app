@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -8,7 +8,7 @@ export default function NewIdeaPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -113,3 +113,4 @@ export default function NewIdeaPage() {
     </div>
   );
 }
+
