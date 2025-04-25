@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AuthPage() {
@@ -10,13 +10,13 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
     
     try {
       // Simulação de login bem-sucedido para demonstração
