@@ -97,12 +97,20 @@ async function analyzeIdeaWithAI(ideaData: IdeaData) {
   }
   
   // Estimativa de capital inicial
-  const capitalEstimate = {
-    development: Math.round((Math.random() * 30000) + 20000), // 20-50k
-    marketing: Math.round((Math.random() * 20000) + 10000),   // 10-30k
-    operations: Math.round((Math.random() * 15000) + 5000),   // 5-20k
-  };
-  capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing + capitalEstimate.operations;
+const capitalEstimate: {
+  development: number;
+  marketing: number;
+  operations: number;
+  total: number;
+} = {
+  development: Math.round((Math.random() * 30000) + 20000),
+  marketing: Math.round((Math.random() * 20000) + 10000),
+  operations: Math.round((Math.random() * 15000) + 5000),
+  total: 0
+};
+
+capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing + capitalEstimate.operations;
+
   
   // Retornar análise completa
   return {
