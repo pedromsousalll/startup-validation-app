@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Simulação de serviço de análise de mercado
-// Em uma implementação real, isso seria conectado a APIs de dados de mercado e modelos de IA
-async function analyzeMarket(category: string) {
-  // Dados simulados de análise de mercado
+async function analyzeMarketData(category: string) {
   const marketData = {
     "Sustentabilidade": {
       sectorGrowth: "28% ao ano",
@@ -86,8 +84,7 @@ async function analyzeMarket(category: string) {
       ]
     }
   };
-  
-  // Retornar dados para a categoria específica ou dados padrão
+
   return marketData[category] || {
     sectorGrowth: "20% ao ano",
     trendDirection: "Estável",
@@ -106,9 +103,8 @@ async function analyzeMarket(category: string) {
   };
 }
 
-// Função para analisar concorrentes
-async function analyzeMarket(category: string) {
-  // Dados simulados de concorrentes por categoria
+// Simulação de análise de concorrentes
+async function analyzeCompetitors(category: string) {
   const competitorsData = {
     "Sustentabilidade": [
       {
@@ -147,35 +143,31 @@ async function analyzeMarket(category: string) {
       }
     ]
   };
-  
-  // Retornar concorrentes para a categoria específica ou array vazio
+
   return competitorsData[category] || [];
 }
 
-export async function GET(request) {
+// Handler GET
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const category = searchParams.get('category');
-  
+  const category = searchParams.get("category");
+
   if (!category) {
     return NextResponse.json(
       { error: "Categoria não especificada" },
       { status: 400 }
     );
   }
-  
+
   try {
-    // Obter análise de mercado
-    const marketAnalysis = await analyzeMarket(category);
-    
-    // Obter análise de concorrentes
-    const competitors = await analyzeCompetitors(category: string) {
-    
-    // Combinar resultados
+    const marketAnalysis = await analyzeMarketData(category);
+    const competitors = await analyzeCompetitors(category);
+
     const result = {
       marketAnalysis,
       competitors
     };
-    
+
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Erro na análise de mercado:", error);
@@ -185,3 +177,4 @@ export async function GET(request) {
     );
   }
 }
+
