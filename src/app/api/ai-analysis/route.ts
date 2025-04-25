@@ -1,23 +1,46 @@
 import { NextResponse } from "next/server";
 
+interface IdeaData {
+  title: string;
+  shortDescription: string;
+  category: string;
+  currentResources?: string;
+}
+
+interface CapitalEstimate {
+  development: number;
+  marketing: number;
+  operations: number;
+  total: number;
+}
+
+interface AnalysisResult {
+  score: number;
+  strengths: string[];
+  weaknesses: string[];
+  marketViability: string;
+  innovationLevel: string;
+  nextSteps: string[];
+  capitalEstimate: CapitalEstimate;
+  marketTrendScore: number;
+  innovationScore: number;
+  feasibilityScore: number;
+}
+
 // Simulação de serviço de análise de IA
-// Em uma implementação real, isso seria conectado a um modelo de IA como GPT-4 ou similar
-async function analyzeIdeaWithAI(ideaData) {
-  // Simulação de análise de IA
-  // Em produção, isso enviaria os dados para um modelo de IA e receberia a análise
-  
-  // Calcular pontuação com base em vários fatores
+async function analyzeIdeaWithAI(ideaData: IdeaData): Promise<AnalysisResult> {
   const marketTrendScore = Math.floor(Math.random() * 30) + 60; // 60-90
   const innovationScore = Math.floor(Math.random() * 30) + 60; // 60-90
   const feasibilityScore = Math.floor(Math.random() * 30) + 60; // 60-90
-  
-  // Pontuação final ponderada
+
   const finalScore = Math.round(
-    (marketTrendScore * 0.4) + (innovationScore * 0.3) + (feasibilityScore * 0.3)
+    marketTrendScore * 0.4 +
+    innovationScore * 0.3 +
+    feasibilityScore * 0.3
   );
-  
-  // Gerar pontos fortes com base na categoria e descrição
-  const strengths = [];
+
+  const strengths: string[] = [];
+
   if (ideaData.category === "Sustentabilidade") {
     strengths.push("Aborda um problema crescente e relevante globalmente");
     strengths.push("Potencial para parcerias com empresas sustentáveis");
@@ -31,41 +54,38 @@ async function analyzeIdeaWithAI(ideaData) {
     strengths.push("Proposta de valor clara e bem definida");
     strengths.push("Potencial para crescimento rápido");
   }
-  
-  if (ideaData.shortDescription.toLowerCase().includes("app") || 
-      ideaData.shortDescription.toLowerCase().includes("aplicativo")) {
+
+  if (ideaData.shortDescription.toLowerCase().includes("app") ||
+    ideaData.shortDescription.toLowerCase().includes("aplicativo")) {
     strengths.push("Baixo custo inicial de desenvolvimento");
     strengths.push("Potencial para monetização através de múltiplos canais");
   }
-  
-  if (ideaData.shortDescription.toLowerCase().includes("ia") || 
-      ideaData.shortDescription.toLowerCase().includes("inteligência artificial")) {
+
+  if (ideaData.shortDescription.toLowerCase().includes("ia") ||
+    ideaData.shortDescription.toLowerCase().includes("inteligência artificial")) {
     strengths.push("Utilização de tecnologia de ponta com alto potencial disruptivo");
     strengths.push("Possibilidade de criar vantagem competitiva sustentável");
   }
-  
-  // Gerar pontos fracos
-  const weaknesses = [
+
+  const weaknesses: string[] = [
     "Necessidade de validação mais aprofundada com usuários reais",
     "Potencial competição de grandes players do mercado"
   ];
-  
+
   if (ideaData.category === "E-commerce" || ideaData.category === "Fintech") {
     weaknesses.push("Mercado altamente competitivo com baixas barreiras de entrada");
   }
-  
+
   if (!ideaData.currentResources || ideaData.currentResources.trim() === "") {
     weaknesses.push("Falta de recursos iniciais claramente definidos");
   }
-  
-  // Gerar próximos passos recomendados
-  const nextSteps = [
+
+  const nextSteps: string[] = [
     "Realizar pesquisa de mercado mais aprofundada",
     "Desenvolver um MVP (Produto Mínimo Viável) para validação",
     "Identificar potenciais parceiros estratégicos"
   ];
-  
-  // Análise de viabilidade de mercado
+
   let marketViability = "";
   if (finalScore >= 85) {
     marketViability = "Alta - O mercado para esta solução está em crescimento acelerado, com forte demanda e poucos concorrentes estabelecidos.";
@@ -76,8 +96,7 @@ async function analyzeIdeaWithAI(ideaData) {
   } else {
     marketViability = "Baixa - O mercado é altamente competitivo ou ainda não está maduro o suficiente para esta solução.";
   }
-  
-  // Análise de nível de inovação
+
   let innovationLevel = "";
   if (innovationScore >= 85) {
     innovationLevel = "Alto - Solução altamente inovadora com potencial disruptivo no mercado.";
@@ -88,16 +107,15 @@ async function analyzeIdeaWithAI(ideaData) {
   } else {
     innovationLevel = "Baixo - Solução similar a outras já existentes no mercado, com poucos diferenciais.";
   }
-  
-  // Estimativa de capital inicial
-  const capitalEstimate = {
-    development: Math.round((Math.random() * 30000) + 20000), // 20-50k
-    marketing: Math.round((Math.random() * 20000) + 10000),   // 10-30k
-    operations: Math.round((Math.random() * 15000) + 5000),   // 5-20k
+
+  const capitalEstimate: CapitalEstimate = {
+    development: Math.round(Math.random() * 30000 + 20000),
+    marketing: Math.round(Math.random() * 20000 + 10000),
+    operations: Math.round(Math.random() * 15000 + 5000),
+    total: 0
   };
   capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing + capitalEstimate.operations;
-  
-  // Retornar análise completa
+
   return {
     score: finalScore,
     strengths,
@@ -112,21 +130,19 @@ async function analyzeIdeaWithAI(ideaData) {
   };
 }
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
-    // Validar dados de entrada
+
     if (!body.title || !body.shortDescription || !body.category) {
       return NextResponse.json(
         { error: "Dados insuficientes para análise" },
         { status: 400 }
       );
     }
-    
-    // Realizar análise de IA
-    const analysis = await analyzeIdeaWithAI(body);
-    
+
+    const analysis = await analyzeIdeaWithAI(body as IdeaData);
+
     return NextResponse.json(analysis, { status: 200 });
   } catch (error) {
     console.error("Erro na análise de IA:", error);
@@ -136,3 +152,4 @@ export async function POST(request) {
     );
   }
 }
+
