@@ -7,16 +7,43 @@ import { useRouter } from 'next/navigation';
 export default function NewIdeaPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    shortDescription: '',
+    longDescription: '',
+    category: '',
+    targetAudience: '',
+    problemSolved: '',
+    currentResources: ''
+  });
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
   
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulação de envio para API
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Redirecionar para a página de ideias após "salvar"
-    router.push('/ideas');
+    try {
+      // Simulação de envio para API
+      console.log('Enviando ideia:', formData);
+      
+      // Simulação de análise de IA
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Redirecionar para a página de ideias após "salvar"
+      router.push('/ideas');
+    } catch (error) {
+      console.error('Erro ao enviar ideia:', error);
+      // Aqui você adicionaria código para mostrar uma mensagem de erro
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (
@@ -32,65 +59,125 @@ export default function NewIdeaPage() {
       <main>
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
-            <div className="bg-gray-800 rounded-lg p-6">
+            <div className="bg-gray-800 rounded-lg shadow-lg p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-300">Título da Ideia</label>
+                  <label htmlFor="title" className="block text-sm font-medium text-gray-300">
+                    Título da Ideia *
+                  </label>
                   <input
                     type="text"
                     id="title"
-                    className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Ex: App de Sustentabilidade"
+                    name="title"
                     required
+                    value={formData.title}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Ex: App de Sustentabilidade"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="problem" className="block text-sm font-medium text-gray-300">Problema a Resolver</label>
-                  <textarea
-                    id="problem"
-                    rows={3}
-                    className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Descreva o problema que sua ideia resolve..."
-                    required
-                  ></textarea>
-                </div>
-                
-                <div>
-                  <label htmlFor="solution" className="block text-sm font-medium text-gray-300">Solução Proposta</label>
-                  <textarea
-                    id="solution"
-                    rows={3}
-                    className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Descreva como sua ideia resolve o problema..."
-                    required
-                  ></textarea>
-                </div>
-                
-                <div>
-                  <label htmlFor="target" className="block text-sm font-medium text-gray-300">Público-Alvo</label>
+                  <label htmlFor="shortDescription" className="block text-sm font-medium text-gray-300">
+                    Descrição Curta *
+                  </label>
                   <input
                     type="text"
-                    id="target"
-                    className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Ex: Consumidores conscientes, 25-45 anos"
+                    id="shortDescription"
+                    name="shortDescription"
                     required
+                    value={formData.shortDescription}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Resumo da sua ideia em uma frase"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="market" className="block text-sm font-medium text-gray-300">Tamanho do Mercado</label>
-                  <select
-                    id="market"
-                    className="mt-1 block w-full rounded-md bg-gray-700 border-gray-600 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  <label htmlFor="longDescription" className="block text-sm font-medium text-gray-300">
+                    Descrição Detalhada *
+                  </label>
+                  <textarea
+                    id="longDescription"
+                    name="longDescription"
+                    rows={4}
                     required
+                    value={formData.longDescription}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Descreva sua ideia em detalhes, incluindo como ela funciona e qual valor ela entrega"
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium text-gray-300">
+                    Categoria *
+                  </label>
+                  <select
+                    id="category"
+                    name="category"
+                    required
+                    value={formData.category}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
                   >
-                    <option value="">Selecione...</option>
-                    <option value="small">Pequeno (nicho)</option>
-                    <option value="medium">Médio (regional)</option>
-                    <option value="large">Grande (nacional)</option>
-                    <option value="global">Global</option>
+                    <option value="">Selecione uma categoria</option>
+                    <option value="Sustentabilidade">Sustentabilidade</option>
+                    <option value="Fintech">Fintech</option>
+                    <option value="Saúde Digital">Saúde Digital</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Educação">Educação</option>
+                    <option value="Mobilidade">Mobilidade</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Outro">Outro</option>
                   </select>
+                </div>
+                
+                <div>
+                  <label htmlFor="targetAudience" className="block text-sm font-medium text-gray-300">
+                    Público-Alvo *
+                  </label>
+                  <input
+                    type="text"
+                    id="targetAudience"
+                    name="targetAudience"
+                    required
+                    value={formData.targetAudience}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Ex: Jovens adultos (18-35 anos) preocupados com questões ambientais"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="problemSolved" className="block text-sm font-medium text-gray-300">
+                    Problema Resolvido *
+                  </label>
+                  <textarea
+                    id="problemSolved"
+                    name="problemSolved"
+                    rows={3}
+                    required
+                    value={formData.problemSolved}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Descreva o problema que sua ideia resolve e por que é importante"
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label htmlFor="currentResources" className="block text-sm font-medium text-gray-300">
+                    Recursos Atuais
+                  </label>
+                  <textarea
+                    id="currentResources"
+                    name="currentResources"
+                    rows={2}
+                    value={formData.currentResources}
+                    onChange={handleChange}
+                    className="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500"
+                    placeholder="Ex: Equipe de 2 desenvolvedores, protótipo inicial, etc."
+                  ></textarea>
                 </div>
                 
                 <div className="flex justify-end space-x-3">
