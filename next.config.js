@@ -4,9 +4,7 @@ const nextConfig = {
   images: {
     domains: ['localhost', 'vercel.app', 'example.com'],
   },
-  experimental: {
-    serverActions: true,
-  },
 }
 
 module.exports = nextConfig
+
