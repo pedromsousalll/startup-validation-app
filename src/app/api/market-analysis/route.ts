@@ -1,23 +1,21 @@
-import { NextResponse } from "next/server";
+const data = marketData[category as keyof typeof marketData];
 
-// Simulação de serviço de análise de mercado
-async function analyzeMarketData(category: string) {
-  const marketData = {
-    "Sustentabilidade": {
-      sectorGrowth: "28% ao ano",
-      trendDirection: "Crescente",
-      targetMarketSize: "€4.5 bilhões",
-      sentiment: "Muito Positivo",
-      keyInsights: [
-        "Aplicativos de rastreamento de pegada de carbono mostram crescimento de 35% ano a ano",
-        "Investimentos em startups de sustentabilidade aumentaram 42% no último trimestre",
-        "Consumidores estão dispostos a pagar até 20% a mais por produtos sustentáveis"
-      ],
-      relatedStocks: [
-        { symbol: "ENPH", name: "Enphase Energy", change: "+2.4%" },
-        { symbol: "SEDG", name: "SolarEdge", change: "+1.8%" },
-        { symbol: "NEE", name: "NextEra Energy", change: "+0.5%" }
-      ]
+return data || {
+  sectorGrowth: "20% ao ano",
+  trendDirection: "Estável",
+  targetMarketSize: "€5.0 bilhões",
+  sentiment: "Neutro",
+  keyInsights: [
+    "Mercado em desenvolvimento com oportunidades emergentes",
+    "Investimentos moderados no setor nos últimos 12 meses",
+    "Tendência de crescimento alinhada com a média do mercado"
+  ],
+  relatedStocks: [
+    { symbol: "SPY", name: "S&P 500 ETF", change: "+0.5%" },
+    { symbol: "QQQ", name: "Nasdaq ETF", change: "+0.7%" },
+    { symbol: "VGT", name: "Vanguard IT ETF", change: "+0.6%" }
+  ]
+};
     },
     "Fintech": {
       sectorGrowth: "22% ao ano",
