@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 export default function MarketAnalysisPage() {
@@ -72,7 +72,7 @@ export default function MarketAnalysisPage() {
     }
   ]);
   
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Filtrar tendências com base no termo de pesquisa
@@ -82,9 +82,9 @@ export default function MarketAnalysisPage() {
   );
   
   // Função para selecionar uma categoria
-const selectCategory = (category: string) => {
-  setSelectedCategory(category === selectedCategory ? null : category);
-};
+  const selectCategory = (category: string) => {
+    setSelectedCategory(prevCategory => (prevCategory === category ? null : category));
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
