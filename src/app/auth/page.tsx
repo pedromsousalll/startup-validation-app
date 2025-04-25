@@ -15,7 +15,7 @@ export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {  // Definição do tipo para o parâmetro 'e'
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -23,11 +23,9 @@ export default function AuthPage() {
     try {
       if (mode === 'login') {
         // Simulação de login bem-sucedido
-        // Em uma implementação real, isso faria uma chamada à API
         console.log('Login com:', { email, password });
         
         // Redirecionar com base no tipo de usuário
-        // Em uma implementação real, isso seria determinado pela resposta da API
         if (email.includes('investor')) {
           router.push('/investor/dashboard');
         } else {
