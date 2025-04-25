@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 interface IdeaData {
   title: string;
@@ -127,7 +127,7 @@ capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing 
   };
 }
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
