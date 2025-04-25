@@ -31,6 +31,17 @@ export default function DashboardPage() {
       createdAt: "02/04/2025"
     }
   ];
+
+  const [interestedCategories, setInterestedCategories] = useState<string[]>([]);
+
+  // Função para alternar interesse em uma categoria
+  const toggleCategoryInterest = (category: string) => {
+    if (interestedCategories.includes(category)) {
+      setInterestedCategories(interestedCategories.filter(c => c !== category));
+    } else {
+      setInterestedCategories([...interestedCategories, category]);
+    }
+  };
   
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -203,4 +214,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
