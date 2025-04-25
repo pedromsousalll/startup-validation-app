@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 
+interface IdeaData {
+  title: string;
+  shortDescription: string;
+  category: string;
+  currentResources?: string;
+}
+
 // Simulação de serviço de análise de IA
 // Em uma implementação real, isso seria conectado a um modelo de IA como GPT-4 ou similar
-async function analyzeIdeaWithAI(ideaData) {
+async function analyzeIdeaWithAI(ideaData: IdeaData) {
   // Simulação de análise de IA
   // Em produção, isso enviaria os dados para um modelo de IA e receberia a análise
   
