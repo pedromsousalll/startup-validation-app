@@ -82,9 +82,10 @@ export default function MarketAnalysisPage() {
   );
   
   // Função para selecionar uma categoria
-  const selectCategory = (category) => {
-    setSelectedCategory(category === selectedCategory ? null : category);
-  };
+const selectCategory = (category: string) => {
+  setSelectedCategory(category === selectedCategory ? null : category);
+};
+
   
   return (
     <div className="min-h-screen bg-gray-900 text-white">
