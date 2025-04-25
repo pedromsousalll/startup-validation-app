@@ -1,8 +1,45 @@
 import { NextResponse } from "next/server";
+import { analyzeMarketWithGemini } from "@/lib/gemini";
 
-// Simulação de serviço de análise de mercado
-// Em uma implementação real, isso seria conectado a APIs de dados de mercado e modelos de IA
-async function analyzeMarket(category: string) {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const category = searchParams.get("category");
+
+  if (!category) {
+    return NextResponse.json(
+      { error: "Categoria não especificada" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    try {
+      // Realizar análise de mercado com o Gemini Advanced
+      const marketData = await analyzeMarketWithGemini(category);
+      
+      return NextResponse.json(marketData, { status: 200 });
+    } catch (error: any) {
+      console.error("Erro na análise de mercado com Gemini:", error);
+      
+      // Se houver um erro com o Gemini, usar a simulação como fallback
+      console.log("Usando simulação como fallback devido a erro na API do Gemini");
+      const marketAnalysis = await analyzeMarketFallback(category);
+      const competitors = await analyzeCompetitorsFallback(category);
+      
+      return NextResponse.json({ marketAnalysis, competitors }, { status: 200 });
+    }
+  } catch (error) {
+    console.error("Erro na análise de mercado:", error);
+    return NextResponse.json(
+      { error: "Erro ao processar análise de mercado" },
+      { status: 500 }
+    );
+  }
+}
+
+// Simulação de serviço de análise de mercado como fallback
+// Usado apenas se a API do Gemini falhar
+async function analyzeMarketFallback(category: string) {
   // Dados simulados de análise de mercado
   const marketData: Record<string, {
     sectorGrowth: string;
@@ -113,8 +150,8 @@ async function analyzeMarket(category: string) {
   };
 }
 
-// Função para analisar concorrentes
-async function analyzeCompetitors(category: string) {
+// Função para analisar concorrentes como fallback
+async function analyzeCompetitorsFallback(category: string) {
   // Dados simulados de concorrentes por categoria
   const competitorsData: Record<string, {
     name: string;
@@ -166,27 +203,4 @@ async function analyzeCompetitors(category: string) {
   return competitorsData[category] || [];
 }
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const category = searchParams.get("category");
 
-  if (!category) {
-    return NextResponse.json(
-      { error: "Categoria não especificada" },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const marketAnalysis = await analyzeMarket(category);
-    const competitors = await analyzeCompetitors(category);
-
-    return NextResponse.json({ marketAnalysis, competitors }, { status: 200 });
-  } catch (error) {
-    console.error("Erro na análise de mercado:", error);
-    return NextResponse.json(
-      { error: "Erro ao processar análise de mercado" },
-      { status: 500 }
-    );
-  }
-}

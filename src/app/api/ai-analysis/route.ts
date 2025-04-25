@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
+import { analyzeIdeaWithGemini } from "@/lib/gemini";
 
 interface IdeaData {
   title: string;
@@ -7,9 +8,44 @@ interface IdeaData {
   currentResources?: string;
 }
 
-// Simulação de serviço de análise de IA
-// Em uma implementação real, isso seria conectado a um modelo de IA como GPT-4 ou similar
-async function analyzeIdeaWithAI(ideaData: IdeaData) {
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    // Validar dados de entrada
+    if (!body.title || !body.shortDescription || !body.category) {
+      return NextResponse.json(
+        { error: "Dados insuficientes para análise" },
+        { status: 400 }
+      );
+    }
+    
+    try {
+      // Realizar análise com o Gemini Advanced
+      const analysis = await analyzeIdeaWithGemini(body);
+      
+      return NextResponse.json(analysis, { status: 200 });
+    } catch (error: any) {
+      console.error("Erro na análise com Gemini:", error);
+      
+      // Se houver um erro com o Gemini, usar a simulação como fallback
+      console.log("Usando simulação como fallback devido a erro na API do Gemini");
+      const fallbackAnalysis = await analyzeIdeaWithAIFallback(body);
+      
+      return NextResponse.json(fallbackAnalysis, { status: 200 });
+    }
+  } catch (error) {
+    console.error("Erro na análise de IA:", error);
+    return NextResponse.json(
+      { error: "Erro ao processar análise de IA" },
+      { status: 500 }
+    );
+  }
+}
+
+// Simulação de serviço de análise de IA como fallback
+// Usado apenas se a API do Gemini falhar
+async function analyzeIdeaWithAIFallback(ideaData: IdeaData) {
   // Simulação de análise de IA
   // Em produção, isso enviaria os dados para um modelo de IA e receberia a análise
   
@@ -97,20 +133,19 @@ async function analyzeIdeaWithAI(ideaData: IdeaData) {
   }
   
   // Estimativa de capital inicial
-const capitalEstimate: {
-  development: number;
-  marketing: number;
-  operations: number;
-  total: number;
-} = {
-  development: Math.round((Math.random() * 30000) + 20000),
-  marketing: Math.round((Math.random() * 20000) + 10000),
-  operations: Math.round((Math.random() * 15000) + 5000),
-  total: 0
-};
+  const capitalEstimate: {
+    development: number;
+    marketing: number;
+    operations: number;
+    total: number;
+  } = {
+    development: Math.round((Math.random() * 30000) + 20000),
+    marketing: Math.round((Math.random() * 20000) + 10000),
+    operations: Math.round((Math.random() * 15000) + 5000),
+    total: 0
+  };
 
-capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing + capitalEstimate.operations;
-
+  capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing + capitalEstimate.operations;
   
   // Retornar análise completa
   return {
@@ -127,27 +162,3 @@ capitalEstimate.total = capitalEstimate.development + capitalEstimate.marketing 
   };
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    
-    // Validar dados de entrada
-    if (!body.title || !body.shortDescription || !body.category) {
-      return NextResponse.json(
-        { error: "Dados insuficientes para análise" },
-        { status: 400 }
-      );
-    }
-    
-    // Realizar análise de IA
-    const analysis = await analyzeIdeaWithAI(body);
-    
-    return NextResponse.json(analysis, { status: 200 });
-  } catch (error) {
-    console.error("Erro na análise de IA:", error);
-    return NextResponse.json(
-      { error: "Erro ao processar análise de IA" },
-      { status: 500 }
-    );
-  }
-}
