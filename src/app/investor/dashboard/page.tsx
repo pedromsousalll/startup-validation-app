@@ -100,7 +100,7 @@ export default function InvestorDashboardPage() {
   ]);
   
   // Função para alternar interesse em uma categoria
-  const toggleCategoryInterest = (category) => {
+const toggleCategoryInterest = (category: string) => {
     if (interestedCategories.includes(category)) {
       setInterestedCategories(interestedCategories.filter(c => c !== category));
     } else {
