@@ -86,7 +86,6 @@ const selectCategory = (category: string) => {
   setSelectedCategory(category === selectedCategory ? null : category);
 };
 
-  
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <header className="bg-gray-800 shadow">
