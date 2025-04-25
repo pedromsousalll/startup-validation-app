@@ -168,7 +168,7 @@ export async function GET(request) {
     const marketAnalysis = await analyzeMarket(category);
     
     // Obter análise de concorrentes
-    const competitors = await analyzeCompetitors(category);
+    const competitors = await analyzeCompetitors(category: string) {
     
     // Combinar resultados
     const result = {
