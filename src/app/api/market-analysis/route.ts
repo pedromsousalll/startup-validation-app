@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 // Simulação de serviço de análise de mercado
 // Em uma implementação real, isso seria conectado a APIs de dados de mercado e modelos de IA
-async function analyzeMarket(category) {
+async function analyzeMarket(category: string) {
   // Dados simulados de análise de mercado
   const marketData = {
     "Sustentabilidade": {
@@ -107,7 +107,7 @@ async function analyzeMarket(category) {
 }
 
 // Função para analisar concorrentes
-async function analyzeCompetitors(category) {
+async function analyzeCompetitors(category: string) {
   // Dados simulados de concorrentes por categoria
   const competitorsData = {
     "Sustentabilidade": [
