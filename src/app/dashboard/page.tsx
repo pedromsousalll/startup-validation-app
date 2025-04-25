@@ -54,7 +54,7 @@ export default function Dashboard() {
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-300">70%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-600">
-                      <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '70%'}}></div>
+                      <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '70%' as any}}></div>
                     </div>
                   </div>
                   <div>
@@ -63,7 +63,7 @@ export default function Dashboard() {
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-300">45%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-600">
-                      <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '45%'}}></div>
+                      <div className="bg-blue-600 h-2.5 rounded-full" style={{width: '45%' as any}}></div>
                     </div>
                   </div>
                 </div>
