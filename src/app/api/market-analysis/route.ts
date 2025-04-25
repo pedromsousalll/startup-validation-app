@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 
 // Simulação de serviço de análise de mercado
-async function analyzeMarket(category: string) {
+// Em uma implementação real, isso seria conectado a APIs de dados de mercado e modelos de IA
+async function analyzeMarket(category) {
+  // Dados simulados de análise de mercado
   const marketData = {
-    Sustentabilidade: {
+    "Sustentabilidade": {
       sectorGrowth: "28% ao ano",
       trendDirection: "Crescente",
       targetMarketSize: "€4.5 bilhões",
@@ -19,7 +21,7 @@ async function analyzeMarket(category: string) {
         { symbol: "NEE", name: "NextEra Energy", change: "+0.5%" }
       ]
     },
-    Fintech: {
+    "Fintech": {
       sectorGrowth: "22% ao ano",
       trendDirection: "Crescente",
       targetMarketSize: "€8.2 bilhões",
@@ -67,7 +69,7 @@ async function analyzeMarket(category: string) {
         { symbol: "MELI", name: "MercadoLibre", change: "+1.2%" }
       ]
     },
-    Educação: {
+    "Educação": {
       sectorGrowth: "25% ao ano",
       trendDirection: "Crescente",
       targetMarketSize: "€3.7 bilhões",
@@ -84,33 +86,31 @@ async function analyzeMarket(category: string) {
       ]
     }
   };
-
-  const data = marketData[category as keyof typeof marketData];
-
-  return (
-    data || {
-      sectorGrowth: "20% ao ano",
-      trendDirection: "Estável",
-      targetMarketSize: "€5.0 bilhões",
-      sentiment: "Neutro",
-      keyInsights: [
-        "Mercado em desenvolvimento com oportunidades emergentes",
-        "Investimentos moderados no setor nos últimos 12 meses",
-        "Tendência de crescimento alinhada com a média do mercado"
-      ],
-      relatedStocks: [
-        { symbol: "SPY", name: "S&P 500 ETF", change: "+0.5%" },
-        { symbol: "QQQ", name: "Nasdaq ETF", change: "+0.7%" },
-        { symbol: "VGT", name: "Vanguard IT ETF", change: "+0.6%" }
-      ]
-    }
-  );
+  
+  // Retornar dados para a categoria específica ou dados padrão
+  return marketData[category] || {
+    sectorGrowth: "20% ao ano",
+    trendDirection: "Estável",
+    targetMarketSize: "€5.0 bilhões",
+    sentiment: "Neutro",
+    keyInsights: [
+      "Mercado em desenvolvimento com oportunidades emergentes",
+      "Investimentos moderados no setor nos últimos 12 meses",
+      "Tendência de crescimento alinhada com a média do mercado"
+    ],
+    relatedStocks: [
+      { symbol: "SPY", name: "S&P 500 ETF", change: "+0.5%" },
+      { symbol: "QQQ", name: "Nasdaq ETF", change: "+0.7%" },
+      { symbol: "VGT", name: "Vanguard IT ETF", change: "+0.6%" }
+    ]
+  };
 }
 
-// Simulação de análise de concorrência
-async function analyzeCompetitors(category: string) {
-  const competitorsData: Record<string, any[]> = {
-    Sustentabilidade: [
+// Função para analisar concorrentes
+async function analyzeCompetitors(category) {
+  // Dados simulados de concorrentes por categoria
+  const competitorsData = {
+    "Sustentabilidade": [
       {
         name: "EcoTrack",
         description: "Aplicativo focado em rastreamento de pegada de carbono com visualizações detalhadas",
@@ -128,7 +128,7 @@ async function analyzeCompetitors(category: string) {
         fundingAmount: "€1.2M"
       }
     ],
-    Fintech: [
+    "Fintech": [
       {
         name: "MoneyWise",
         description: "Aplicativo de educação financeira com simulações e desafios",
@@ -147,26 +147,36 @@ async function analyzeCompetitors(category: string) {
       }
     ]
   };
-
+  
+  // Retornar concorrentes para a categoria específica ou array vazio
   return competitorsData[category] || [];
 }
 
-export async function GET(request: Request) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
-  const category = searchParams.get("category");
-
+  const category = searchParams.get('category');
+  
   if (!category) {
     return NextResponse.json(
       { error: "Categoria não especificada" },
       { status: 400 }
     );
   }
-
+  
   try {
+    // Obter análise de mercado
     const marketAnalysis = await analyzeMarket(category);
+    
+    // Obter análise de concorrentes
     const competitors = await analyzeCompetitors(category);
-
-    return NextResponse.json({ marketAnalysis, competitors }, { status: 200 });
+    
+    // Combinar resultados
+    const result = {
+      marketAnalysis,
+      competitors
+    };
+    
+    return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Erro na análise de mercado:", error);
     return NextResponse.json(
