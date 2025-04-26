@@ -1,60 +1,42 @@
-import { NextResponse, NextRequest } from "next/server";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validate input data
-    if (!body.title || !body.shortDescription || !body.category || !body.creatorId) {
-      return NextResponse.json(
-        {
-          error: "Dados insuficientes para criar ideia"
-        },
-        {
-          status: 400
-        }
-      );
+    const {
+      name,
+      description,
+      category,
+      targetAudience = "",
+      problemSolved = "",
+      currentResources = "",
+      progress = 0,
+      image = null,
+    } = body;
+
+    // Validação básica (podes evoluir para uma lib tipo zod depois se quiseres)
+    if (!name || !description || !category) {
+      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
-    // Create the idea in the database
     const idea = await prisma.idea.create({
       data: {
-        title: body.title,
-        shortDescription: body.shortDescription,
-        longDescription: body.longDescription || "",
-        category: body.category,
-        targetAudience: body.targetAudience || "",
-        problemSolved: body.problemSolved || "",
-        currentResources: body.currentResources || "",
-        progress: body.progress || 0,
-        image: body.image || null,
-        creatorId: body.creatorId,
-      }
-    });
-
-    // Create initial progress log
-    await prisma.progressLog.create({
-      data: {
-        ideaId: idea.id,
-        progressValue: idea.progress,
-        description: "Ideia criada",
-        milestone: "Início",
-      }
-    });
-
-    return NextResponse.json(idea, {
-      status: 201
-    });
-  } catch (error) {
-    console.error("Erro ao criar ideia:", error);
-    return NextResponse.json(
-      {
-        error: "Erro ao criar ideia"
+        name,
+        description,
+        category,
+        targetAudience,
+        problemSolved,
+        currentResources,
+        progress,
+        image,
       },
-      {
-        status: 500
-      }
-    );
+    });
+
+    return NextResponse.json(idea, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }
