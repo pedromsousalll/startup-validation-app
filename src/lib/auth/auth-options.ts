@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
             id: user.id.toString(),
             name: user.name,
             email: user.email,
-            role: user.role,
+            role: user.role || "user",  // Garantindo que role tenha um valor, caso não exista
             image: user.image
           };
         } catch (error) {
