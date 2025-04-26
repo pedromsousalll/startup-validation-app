@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           }
           
           return {
-            id: user.id.toString(), // Garantir que o id seja uma string
+            id: user.id.toString(),
             name: user.name,
             email: user.email,
             role: user.role,
@@ -96,4 +96,3 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development"
 };
-
