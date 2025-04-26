@@ -10,15 +10,18 @@ generator client {
 // Mantenha seus modelos como estão
 model Idea {
   id                Int      @id @default(autoincrement())
-  title             String
-  shortDescription  String
-  longDescription   String?
+  name              String
+  description       String
   category          String
-  targetAudience    String?
-  problemSolved     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  targetAudience    String
+  problemSolved     String
+  currentResources  String
+  progress          Int
+  image             String? 
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
+
 
 model User {
   id            Int      @id @default(autoincrement())
