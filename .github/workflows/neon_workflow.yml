@@ -1,0 +1,35 @@
+name: Neon Database Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  create-db-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Neon CLI
+        run: |
+          curl -fsSL https://neon.tech/cli/install.sh | bash
+
+      - name: Create database branch
+        run: neon db create --branch ${{ github.head_ref }}
+
+      - name: Push changes to Neon
+        run: neon db push --branch ${{ github.head_ref }}
+
+  delete-db-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Delete database branch
+        run: neon db delete --branch ${{ github.head_ref }}
