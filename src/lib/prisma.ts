@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 const prismaClientSingleton = () => {
   return new PrismaClient({
     log: ['query', 'error', 'warn'],
-  })
+  }) 
 }
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
