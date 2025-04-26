@@ -9,9 +9,14 @@ generator client {
 
 // Mantenha seus modelos como estão
 model Idea {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
+  id               Int      @id @default(autoincrement())
+  title            String
+  shortDescription String   // 👈 adiciona esta linha
+  longDescription  String?
+  category         String
+  targetAudience   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model User {
