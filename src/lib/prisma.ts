@@ -1,13 +1,19 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-// Evitar múltiplas instâncias do Prisma Client em desenvolvimento
-// https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: ['query', 'error', 'warn'],
+  })
+}
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClientSingleton | undefined
+}
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
 
-export default prisma;
+export default prisma
 
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
