@@ -19,19 +19,16 @@ export const authOptions: NextAuthOptions = {
         }
         
         try {
-          // Em uma implementação real, isso buscaria o usuário do banco de dados
           const user = await getUserByEmail(credentials.email);
           
           if (!user) {
             return null;
           }
           
-          // Verificar se o email foi confirmado
           if (!user.emailVerified) {
             throw new Error("Email não verificado. Por favor, verifique seu email.");
           }
           
-          // Verificar a senha
           const isPasswordValid = await compare(credentials.password, user.password);
           
           if (!isPasswordValid) {
@@ -39,7 +36,7 @@ export const authOptions: NextAuthOptions = {
           }
           
           return {
-            id: user.id,
+            id: user.id.toString(), // Garantir que o id seja uma string
             name: user.name,
             email: user.email,
             role: user.role,
@@ -60,7 +57,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          role: "creator" // Papel padrão para novos usuários
+          role: "creator"
         };
       }
     }),
@@ -94,7 +91,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60 // 30 dias
+    maxAge: 30 * 24 * 60 * 60
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development"
