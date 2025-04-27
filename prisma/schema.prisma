@@ -1,37 +1,55 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Usado para migrações
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-// Mantenha seus modelos como estão
-model Idea {
-  id                Int      @id @default(autoincrement())
-  name              String
-  description       String
-  category          String
-  targetAudience    String
-  problemSolved     String
-  currentResources  String
-  progress          Int
-  image             String? 
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-}
-
-
 model User {
-  id            Int      @id @default(autoincrement())
+  id            Int               @id @default(autoincrement())
   name          String?
-  email         String   @unique
-  password      String   // Considere se todos os users terão password (ex: OAuth)
+  email         String            @unique
+  password      String            // Considere se todos os users terão password (ex: OAuth)
   emailVerified DateTime?
-  role          String?  @default("user")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  image         String? 
+  image         String?
+  role          String            @default("user") // Alterado para "user" no novo modelo
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  ideas         Idea[]
+  verifications VerificationToken[]
 }
 
+model Idea {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String
+  problem         String?
+  solution        String?
+  targetAudience  String
+  marketSize      String?
+  competition     String?
+  businessModel   String?
+  stage           String   @default("concept")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  creatorId       Int
+  creator         User     @relation(fields: [creatorId], references: [id])
+  category        String?
+  problemSolved   String?
+  currentResources String?
+  progress        Int?
+  image           String?
+}
+
+model VerificationToken {
+  id          Int      @id @default(autoincrement())
+  token       String   @unique
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires     DateTime
+  createdAt   DateTime @default(now())
+  type        String   @default("email")
+}
