@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     const idea = await prisma.idea.create({
       data: {
-        name,
+        title,
         description,
         category,
         targetAudience,
