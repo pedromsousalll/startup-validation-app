@@ -44,19 +44,21 @@ export async function POST(request: NextRequest) {
     // Criar a ideia no banco de dados
     const idea = await prisma.idea.create({
       data: {
-        title: ideaTitle,        // <-- Mapeamento correto para o schema
+        // --- RESOLVED VERSION ---
+        title: ideaTitle, // Use the variable that handles both 'name' and 'title' inputs
+        // --- END RESOLVED VERSION ---
         description,
         category,
         targetAudience,
-        problem,                // <-- Usar campo do schema
-        solution,               // <-- Usar campo do schema
+        problem,
+        solution,
         marketSize,
         competition,
         businessModel,
         stage,
         progress,
         image,
-        creatorId: userId,      // <-- ADICIONADO: Associa ao usuário logado
+        creatorId: userId, // Association with the logged-in user
       },
     });
 
